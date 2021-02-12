@@ -3,6 +3,7 @@
 include __DIR__ . '/vendor/autoload.php';
 include __DIR__. '/commands/command.php';
 
+use Discord\CommandClient\Command;
 use Discord\Discord;
 use Discord\Parts\Embed\Author;
 use Discord\Parts\Embed\Embed;
@@ -30,6 +31,7 @@ $discord->on('ready', function ($discord) {
             return;
         }
         global $prefix;
+
         //if the message starts with: ]
         if (str_starts_with($message->content, $prefix )) {
             //remove the ']' and make the message content into a array
@@ -40,6 +42,7 @@ $discord->on('ready', function ($discord) {
             $author = $message->author;
             $channel = $message->channel;
 
+            print_r($author);
             switch ($msgArr[0]) {
                 //avatar command
                 case 'av':
@@ -50,9 +53,9 @@ $discord->on('ready', function ($discord) {
                     chanceCommand($message, $discord, $msgArr);
                     break;
                 /// TODO FIX HELP FUNCTION SO IT SENDS EMBED TO DM
-                //case 'info':
-                    //help($message, $discord, $msgArr);
-                    //break;
+                case 'help':
+                    help($message, $discord, $msgArr);
+                    break;
                 //if no command is mentioned
                 default:
                     return;

@@ -20,12 +20,12 @@ function av(object $message, object $discord, array $args)
     if ($user) {
         foreach ($user as $u) {
             $embed->setTitle("$u->username's avatar");
-            $embed->setImage($u->avatar);
+            $embed->setImage($u->getAvatarAttribute('png'));
         };
         $embed->setDescription(join(" ", $args));
         return $channel->sendEmbed($embed);
     } else {
-        $embed->setImage($author->avatar);
+        $embed->setImage($author->getAvatarAttribute('png'));
         $embed->setTitle("$author->username's profile picture");
         $embed->setDescription(join(" ", $args));
 
@@ -66,7 +66,15 @@ function help(object $message, object $discord, array $args){
     $channel = $message->channel;
 
     $helpembed = new Embed($discord);
-    
+    $helpembed->setTitle("$author->username here is a list of all my commands");
+
+
+    //send DM
+    $author->getPrivateChannel()->done(
+        function($dmChannel) use($helpembed){
+            $dmChannel->sendEmbed($helpembed);
+        }
+    );
 
     //once the dm's with info have been send:
     $message->reply('i have send you a dm with the information');
