@@ -9,20 +9,27 @@ use Discord\Parts\Embed\Embed;
 
 use function React\Promise\Stream\first;
 
+$path = __DIR__. '/json/config.json';
+$data = json_decode(file_get_contents($path));
+$token = $data->token;
+$prefix = $data->prefix;
+
+
 $discord = new Discord([
-    'token' =>//your token here,
+'token' =>$token
 ]);
 
 
 $discord->on('ready', function ($discord) {
     echo "marchosias is ready to serve", PHP_EOL;
 
+
     // Listen for messages.
     $discord->on('message', function ($message, $discord) {
         if ($message->author->bot) {
             return;
         }
-        $prefix = ']';
+        global $prefix;
         //if the message starts with: ]
         if (str_starts_with($message->content, $prefix )) {
             //remove the ']' and make the message content into a array
